@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="bbody" style="height: 100vh; overflow-x: hidden">
     <el-row class="title" style="color: #606060;">
       <img
-        style="margin-right: 20px; height: 55px; width: 55px; vertical-align: middle;"
+        style="margin-right: 20px; height: 45px; width: auto; vertical-align: middle; margin-right: 5px; margin-bottom: 5px;"
         src="../assets/img/browse_label.png"
       />
       Browse all
     </el-row>
-    <!-- 加入了height之后，里面的el-container标签没有滑动栏了 -->
+    <!-- After adding height, the el-container tab inside has no sliding bar -->
     <el-container style="height: expression(document.body.clientHeight-130px); border: 1px solid #eee" >
-      <!-- 侧面导航栏 -->
+      <!-- Side navigation bar -->
       <el-aside width="250px" style="background-color: rgb(238, 241, 246); text-align:left;">
         <el-menu :default-openeds="['1']">
           <el-submenu index="1">
@@ -56,7 +56,7 @@
                 <div v-for="(value,key,index) in valueclass" :key="index">
                     <div :id="indexclass.toString()+index.toString()">
                         <h3><a name="cluster1"></a>Clustering according to {{ keyclass }} : {{ key }}</h3>
-                        <!-- height 固定表头 -->
+                        <!-- height Fixed meter head -->
                         <el-table
                           :data="value"
                           :header-cell-style="{background:'#eef1f6',color:'#606266'}"
@@ -64,7 +64,6 @@
                           empty-text="cannot find"
                           border
                           stripe
-                          height="400"
                           ref="table"
                           strip highlight-current-row
                         >
@@ -112,6 +111,26 @@
         </el-main>
       </el-container>
     </el-container>
+    <template>
+      <el-backtop target=".bbody" :visibility-height="100" :bottom="40">
+        <div
+          style="{
+            height: 100%;
+            width: 100%;
+            background-color: #151D3B;
+            box-shadow: 0 0 6px rgba(0,0,0, .12);
+            text-align: center;
+            line-height: 40px;
+            color: #EFFFFD;
+          }"
+        >
+          <img 
+            style="height: 20px; width: auto; vertical-align: middle;"
+            src="../assets/img/backtotop.png" alt=""
+          >
+        </div>
+      </el-backtop>
+    </template>
   </div>
 </template>
 
@@ -146,8 +165,8 @@ export default {
             var noms_num = {};
             var miss_num = {};
             var cons_num = {};
-            for(let i =0; i<data.length;i++){
-                var dict=data[i];
+            for(let i=0;i<data.length;i++){
+                var dict = data[i];
                 var nom_all = dict.Normal_localization;
                 var mis_all = dict.Mislocalization;
                 var condition = dict.Mislocalization_conditions;
@@ -224,19 +243,43 @@ export default {
                     }
                 }
             }
-          
             var dataclass = {}
             var numbers =[noms_num,miss_num,cons_num]
             localStorage.setItem('numbers',numbers)
-            
-            dataclass["normal localization"]=nomdicts;
-            dataclass["mislocalization"]=misdicts;
-            dataclass["mislocalization condition"]=conditiondicts;
-            
+
+            this.normallocationgo.sort();
+            this.mislocationgo.sort();
+            this.conditiongo.sort();
+            var nomkeys = Object.keys(nomdicts).sort();
+            var miskeys = Object.keys(misdicts).sort();
+            var conkeys = Object.keys(conditiondicts).sort();
+            var nomdict_sorted = {};
+            var misdict_sorted = {};
+            var condict_sorted = {};
+            for(let i=0; i<nomkeys.length; i++){
+              let key = nomkeys[i];
+              let value = nomdicts[key];
+              nomdict_sorted[key] = value;
+            } 
+            for(let i=0; i<miskeys.length; i++){
+              let key = miskeys[i];
+              let value = misdicts[key];
+              misdict_sorted[key] = value;
+            } 
+            for(let i=0; i<conkeys.length; i++){
+              let key = conkeys[i];
+              let value = conditiondicts[key];
+              condict_sorted[key] = value;
+            }        
+
+            dataclass["normal localization"] = nomdict_sorted;
+            dataclass["mislocalization"] = misdict_sorted;
+            dataclass["mislocalization condition"] = condict_sorted;
+
             delete dataclass["normal localization"]['n.a.'];
             delete dataclass["mislocalization"]['n.a.'];
             delete dataclass["mislocalization condition"]['n.a.'];
-            
+
             var norindex = this.normallocationgo.indexOf('n.a.');
             var misindex = this.mislocationgo.indexOf('n.a.');
             var conindex = this.conditiongo.indexOf('n.a.');
@@ -260,12 +303,15 @@ export default {
             };
             showLoading();
             getProteinData(param).then(
-                res=>{   
+                res=>{
+                    // this.loading = false;
                     this.alldata=res.message.info;
                     console.log(this.alldata['Nucleotide_Sequences_FASTA']);
-                    //数据分类
+                    //Data Classification
                     this.datamakeclass(this.alldata);
                     hideLoading();
+                    // console.log(this.dataclass);
+                    // this.closeLoading;
                 },
                 err=>{
                     console.log(err)
@@ -293,22 +339,22 @@ export default {
   line-height: 80px;
   height: 80px;
   background: #e6f0ef; /* Old browsers */
-  background: -moz-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+ background: -moz-linear-gradient(
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
-    135deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9AD0EC', endColorstr='#398AB9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 .el-table {
   font-size: 15px;
@@ -327,15 +373,15 @@ h3 {
   /* border-bottom: 2px solid; */
   /* border-bottom-color: rgb(115, 200, 200); */
   padding: 10px;
-  background-color: rgb(115, 200, 200);
-  color: #e6f0ef;
+  background-color: #398AB9;
+  color: #EFFFFD;
   border-radius: 10px;
 }
 a {
   color: #202122;
 }
 a:hover {
-  color: rgb(115, 200, 200);
+  color: #5D8BF4;
 }
 
 .demo-table-expand {
@@ -359,10 +405,10 @@ a:hover {
 }
 </style>
 <style lang="scss" scoped>
-// /deep/会报错 用::v-deep
+
 ::v-deep .el-form-item__label {
-  float: none; // 取消label左浮动
-  word-break: break-word; // 支持单词截断换行
+  float: none; 
+  word-break: break-word; 
 }
 ::v-deep .el-table__expand-icon{
  -webkit-transform: rotate(0deg);

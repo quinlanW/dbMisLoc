@@ -3,7 +3,7 @@
     <el-row class="title" style="color: #606060;">
       <img
         src="../assets/img/help_label.png"
-        style="height: 45px; width: auto;  vertical-align: middle; margin-right: 20px;"
+        style="height: 45px; width: auto;  vertical-align: middle; margin-right: 10px; margin-bottom: 5px;"
       />
       Help
     </el-row>
@@ -41,7 +41,8 @@
             <strong>(1).</strong> The picture below is an introduction to the
             'Search' page. A dropdown menu will be displayed if the content of
             the search box matches the first few letters of the protein name, 
-            Uniprot ID or Uniprot AC.
+            Uniprot ID, Uniprot AC, subcellular localization or mis-localization 
+            condition.
           </p>
           <img alt="search help" src="../assets/img/help/search_1.png" />
           <p>
@@ -97,7 +98,7 @@
           </p>
           <img alt="blast" src="../assets/img/help/blast_2.png" />
           <p>
-            <strong>(3).</strong> Click the 'More' button to view the corresponding protein sequence.
+            <strong>(3).</strong> Click the 'More' button to view details of the corresponding protein.
           </p>
           <img alt="blast" src="../assets/img/help/blast_3.png" />
         </el-collapse-item>
@@ -128,7 +129,7 @@
 export default {
   data() {
     return {
-      // href与Browse页面第二部分的链接名相对应
+      // The href corresponds to the link name in the second part of the Browse page
       statistics: [
         {
           filesrc: "statistics_01.jpg",
@@ -162,27 +163,32 @@ export default {
   background: #e6f0ef; /* Old browsers */
   background: -moz-linear-gradient(
     -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    #DFF6FF 45%,
+    #00B4D8 100%
+  ); /* FF3.6-15 */
+  background: -moz-linear-gradient(
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
-    135deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9AD0EC', endColorstr='#398AB9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .content {
   // width: 90%;
   margin: 10px auto;
   padding: 20px;
-  border: 2px solid #b4ede7;
+  border: 2px solid #398AB9;
   border-radius: 10px;
   // background-color: #b4ede7;
 }
@@ -198,7 +204,7 @@ export default {
 }
 
 /deep/ .el-collapse-item__content {
-  border-top: 1px solid #b4ede7;
+  border-top: 1px solid #398AB9;
 }
 
 p {
@@ -214,14 +220,14 @@ p {
 }
 
 .setborder {
-  border: 2px solid #b4ede7;
+  border: 2px solid #398AB9;
   border-radius: 10px;
 }
 
 h3 {
   text-align: left;
   padding: 10px;
-  background-color: rgb(115, 200, 200);
+  background-color: #398AB9;
   color: #e6f0ef;
   border-radius: 10px;
 }

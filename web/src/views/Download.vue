@@ -3,7 +3,7 @@
     <el-row class="title" style="color: #606060;">
       <img
         src="../assets/img/download_label.png"
-        style="height: 45px; width: auto;  vertical-align: middle; margin-right: 20px;"
+        style="height: 40px; width: auto;  vertical-align: middle; margin-right: 10px;"
       />
       Download files
     </el-row>
@@ -13,9 +13,6 @@
           <div style="margin: 30px;">
             <span>
               The downloadable file contains all the data in the dbMisLoc database. 
-            <!-- </span>
-            <br><br>
-            <span> -->
               It contains the corresponding name of the protein, normal localization, 
               mislocalization, mislocalization condition, Uniprot AC, Uniprot ID, protein sequence, 
               GO (Biological process, Cellular component and Molecular function) and data source.
@@ -26,17 +23,17 @@
     <div class="files" style="height:40%">
       <h3>dbMisLoc Data Source</h3>
       <div class="download-content" style="height: 90%">
-          <div style="margin:20px;">
-            <a :href="'/api/proteins/file'" download="">
-              <span>
-                <img src="../assets/img/download_csv.png" style="height: 20px; width:auto; vertical-align: middle; margin-right: 10px;" alt="">
-              </span>
-              <span style="margin-bottom:10px;">
-                <b >  All data in the dbMisLoc database(CSV)  </b>
-              </span>
-            </a>
-            
-          </div>
+        <div style="margin:20px;">
+          <a :href="'/api/proteins/file'" download="">
+            <span>
+              <img src="../assets/img/download_csv.png" style="height: 20px; width:auto; vertical-align: middle; margin-right: 10px;" alt="">
+            </span>
+            <span style="margin-bottom:10px;">
+              <b >  All data in the dbMisLoc database(CSV) </b>
+            </span>
+          </a>
+          
+        </div>
       </div>
     </div> 
     <div class="files" style="height:40%">
@@ -59,7 +56,8 @@
 </template>
 
 <script>
-
+// import { getProteinFile } from "@/api/dataReq.js" //test
+// import download from '../assets/js/download'
 export default {
     methods: {
     handleOpen(key, keyPath) {
@@ -67,7 +65,12 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-    }
+    },
+    //test
+    // download(){
+    //   console.log("start download");
+    //   getProteinFile();
+    // },
   }
 }
 </script>
@@ -80,21 +83,21 @@ export default {
   height: 80px;
   background: #e6f0ef; /* Old browsers */
   background: -moz-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
-    135deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9AD0EC', endColorstr='#398AB9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .download-content {
@@ -102,7 +105,7 @@ export default {
   flex-direction: column;
   text-align: left;
   padding: 20px;
-  border: 1px solid rgb(115, 200, 200);
+  border: 2px solid #398AB9;
   border-radius: 10px;
 }
 /* 
@@ -113,7 +116,7 @@ a {
 h3 {
   text-align: left;
   padding: 10px;
-  background-color: rgb(115, 200, 200);
+  background-color: #398AB9;
   color: #e6f0ef;
   border-radius: 10px;
 }

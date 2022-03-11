@@ -1,11 +1,11 @@
 <template>
     <div >
         <el-row class="title" style="color: #606060;">
-            <img style="margin-right: 20px; height: 55px; width: 55px; vertical-align: middle;" src="../assets/img/blast_label.png" />
+            <img style="margin-right: 5px; margin-bottom: 5px; height: 45px; width: auto; vertical-align: middle;" src="../assets/img/blast_label.png" />
                 Blast
         </el-row>
         <div class="myForm" >
-            <!-- Form 表单 -->
+            <!-- Form  -->
             <el-input class="RNAinput" type="textarea" rows="10" placeholder="Enter the query protein sequence(FASTA)" v-model="textarea" clearable></el-input>
             <div class="middle" style="margin-top: 20px">
                 <b>e-value: </b>
@@ -14,11 +14,9 @@
                 </el-select>
                 <b>word size: </b>
                 <el-input v-model="word_size" placeholder="integer in [2,7]" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
-                <el-button class="sou" type="success" v-on:click="Search(evalue,word_size)" style="margin-left: 10px; padding-left: 10px" icon="el-icon-search" plain>Blast</el-button>
+                <el-button class="sou" type="success" v-on:click="Search(evalue,word_size)" style="margin-left: 10px; padding-left: 10px;" icon="el-icon-search" plain>Blast</el-button>
                 <el-button class="sou" type="prime" v-on:click="SearchExample()"   plain>Example</el-button>
                 <el-table :data="tableData" v-show="show" style="width: 100%; margin: 20px auto 0 auto" stripe strip highlight-current-row empty-text="..." border>
-                  
-                  <!-- <el-table-column  label="Query sequence id" prop="qseqid" width="270"></el-table-column> -->
                   <el-table-column  label="Subject seq id" prop="sseqid" width="230"></el-table-column>
                   <el-table-column  label="Percentage(identical matches)" prop="pident" width="250"></el-table-column>
                   <el-table-column  label="Alignment length" prop="length" width="200"></el-table-column>
@@ -77,7 +75,7 @@ export default {
             textarea: '',
             show:false,
             word_size:'2',
-            // 设置evalue下拉框选项
+            // Set the evalue drop-down box option
             options1: [
                 {
                 value: '1e-4',
@@ -95,10 +93,9 @@ export default {
                 value: '1e-7',
                 label: '1e-7 '
                 },],
-            // 设置evalue默认值
+            // Set the default value of evalue
             evalue: '1e-4',
             tableData:[],
-            // seq:[],
         }
     },
     methods: {
@@ -112,7 +109,6 @@ export default {
             this.evalue = val;
         },
         Search(evalue,word_size){
-            // console.log("click serch");
             this.tableData = [];
             showLoading();
             this.show = true;
@@ -152,7 +148,6 @@ export default {
                     };
                     getProteinData(param).then(
                       res=>{
-                        // console.log(res.message.info[0]);
                         let protein = res.message.info[0]['Protein'];
                         let seq = res.message.info[0]['Nucleotide_Sequences_FASTA'];
                         let norloc = res.message.info[0]['Normal_localization'];
@@ -180,7 +175,6 @@ export default {
                             "UID": UID,
                             "UAC": UAC
                           }
-                          // console.log(result["qseqid"]+"!!!!!"); //test
                           this.tableData.push(result)
                           hideLoading();  
                       },
@@ -192,20 +186,27 @@ export default {
                     
                   }
                 }
-                
-                console.log(this.tableData);
             })
             .catch(err=>{
                 console.log(err);
             })
         },
         SearchExample(){
-            this.textarea = this.example;
+            this.textarea = this.example;  
         }
     }
 }
 </script>
 
+<style>
+/* .el-table__expand-icon:after{
+  content: "More";
+  color: #1526df;
+}
+.el-table__expand-icon >i{
+  display: none !important;
+} */
+</style>
 <style scoped>
 .el-select{
   width: 150px !important;
@@ -219,10 +220,10 @@ export default {
 </style>
 <style scoped lang="less">
 .myForm {
-  margin: 10px auto; /* 表单居中设置 */
+  margin: 10px auto; /* Form centering settings */
   padding: 40px 60px;
   width: 75%;
-  border: 3px solid #b4ede7;
+  border: 3px solid #00B4D8;
   border-radius: 10px;
 }
 
@@ -255,25 +256,25 @@ export default {
   height: 80px;
   background: #e6f0ef; /* Old browsers */
   background: -moz-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
-    135deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9AD0EC', endColorstr='#398AB9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .el-form-item {
-  border-top: 1px solid #ebeef5; // 表格线条颜色
+  border-top: 1px solid #ebeef5; // Table line color
   margin-bottom: 0;
 }
 
@@ -301,7 +302,7 @@ export default {
   background-color: rgb(115, 200, 200) !important;
   border-color: rgb(115, 200, 200) !important;
 }
-// 单选框的标签可以换行了
+// Radio box labels can be line feeds
 /deep/ .all_label {
   display: inline-grid;
   white-space: pre-line;
@@ -332,12 +333,12 @@ export default {
   color: #232324;
 }
 /deep/ .el-textarea__inner {
-  border-color: rgb(115, 200, 200) !important;
+  border-color: #398AB9 !important;
   font-size: 15px;
-  color: #232324;
+  color: #000000;
 }
 /deep/ .el-select .el-input__inner:focus {
-  border-color: rgb(115, 200, 200);
+  border-color: #398AB9;
 }
 
 .el-select {
@@ -345,7 +346,7 @@ export default {
 }
 
 .el-select-dropdown__item.selected {
-  color: rgb(115, 200, 200);
+  color: #00B4D8;
 }
 
 .el-select-dropdown__item {
@@ -362,7 +363,7 @@ export default {
 //   border-color: rgb(115, 200, 200);
 // }
 
-// 遮盖原始按钮，以改变原始按钮的样式
+// Cover the original button to change the style of the original button
 .upload {
   height: 35px;
   line-height: 35px;
@@ -377,7 +378,7 @@ export default {
   cursor: pointer;
 }
 
-// 选择文件的原始按钮
+// Select the original button for the file
 .change {
   position: absolute;
   overflow: hidden;
@@ -385,7 +386,7 @@ export default {
   line-height: 35px;
   left: 30px;
   top: 20px;
-  opacity: 0; // 设为透明
+  opacity: 0; 
   cursor: pointer;
 }
 
@@ -397,7 +398,7 @@ export default {
   color: #fff;
   background-color: #337ab7;
   border: #337ab7;
-  margin: auto 10px; // 按钮居中
+  margin: auto 10px; // Button centering
   outline: none;
   cursor: pointer;
 }
@@ -410,7 +411,7 @@ export default {
   color: #fff;
   background-color: #e6a23c;
   border: #e6a23c;
-  margin: 10px 10px 10px; // 按钮居中
+  margin: 10px 10px 10px; 
 }
 
 .progress-wrap {
@@ -435,10 +436,10 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-// /deep/会报错 用::v-deep
+
 ::v-deep .el-form-item__label {
-  float: none; // 取消label左浮动
-  word-break: break-word; // 支持单词截断换行
+  float: none; 
+  word-break: break-word;
 }
 ::v-deep .el-table__expand-icon{
  -webkit-transform: rotate(0deg);

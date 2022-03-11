@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-row class="title" style="color: #606060;">
-      <img src="../assets/img/home_label.png" style="height: 45px; width: auto;  vertical-align: middle; margin-right: 20px;" />
-      Welcome to dbMisLoc
+      <img src="../assets/img/home_label.png" style="height: 45px; width: auto;  vertical-align: middle; margin-right: 10px; margin-bottom: 5px;" />
+      Welcome to <b>dbMisLoc</b>
     </el-row>
     <el-row class="content" type="flex" justify="space-between">
       <el-col :span="10">
@@ -81,21 +81,21 @@
   height: 80px;
   background: #e6f0ef; /* Old browsers */
   background: -moz-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
-    135deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9AD0EC', endColorstr='#398AB9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 .content {
   padding: 20px 10%;
@@ -103,11 +103,11 @@
   text-align: left;
 }
 .content p {
-  /* 行间距 */
+  /* Row spacing */
   line-height: 1.5em;
-  /* 首行缩进 */
+  /* First line indent */
   /* text-indent: 2em; */
-  /* 两端对齐 */
+  /* Alignment of both ends */
   text-align: justify;
 }
 .content p a {

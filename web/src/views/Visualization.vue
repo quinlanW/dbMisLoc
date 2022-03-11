@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-row class="title" style="color: #606060;">
-      <img style="margin-right: 20px; height: 55px; width: 55px; vertical-align: middle;" src="../assets/img/vis_label.png"/>
+      <img style="margin-right: 10px; height: 50px; width: auto; vertical-align: middle;" src="../assets/img/vis_label.png"/>
       Visualization
     </el-row>
     <div class="myForm">
-        <!-- Form 表单 -->
+        <!-- Form  -->
         <el-autocomplete 
             v-model="pname" 
             :fetch-suggestions="querySearchAsync" 
@@ -13,6 +13,7 @@
             @select="handleSelect"
             class="input-with-select"
             clearable
+            style="padding: 10px"
         >
         </el-autocomplete>
         <el-button class="sou" type="primary" @click="visualization" icon="el-icon-search" plain>Visualize</el-button>
@@ -29,10 +30,14 @@
                 <el-form-item label="Mislocalization Condition">
                     <span>{{ props.row.condition }}</span>
                 </el-form-item>
+                <!-- <el-form-item label="Mislocalization Interpretation">
+                    <span>{{ props.row.condition }}</span>
+                </el-form-item> -->
               </el-form>
               </template>
             </el-table-column>
-           </el-table>
+            <!-- <el-table-column label="Mislocalization interpretation" prop="condition"></el-table-column> -->
+          </el-table>
         </div>
         <el-divider></el-divider>
         <div class="show_result" v-show="true" id="show_result">
@@ -44,6 +49,7 @@
 </template>
 
 <script>
+// Cell_membrane, cytoplasm, nucleus, endoplasmic_reticulum, mitochondria, Golgi_apparatus, ribosome, lysosome and centrosome
 import $ from 'jquery'
 import { getProteinData } from '@/api/dataReq'
 import { SVG,SCRIPT_NOMLOCATION,LOCATION_SVG_D } from '../assets/js/visulization.js'
@@ -78,16 +84,12 @@ export default {
         };
     },
     mounted(){
-        // console.log('add_svg')
         var showDiv = document.getElementById('svgbox');
         showDiv.innerHTML=SVG;
-        // console.log(showDiv)
         $('#show_result').html($('#show_result').html())
     },
     methods: {
         querySearchAsync(queryString, cb) {
-            // console.log("query")
-            // console.log(queryString)
             let param ={
                 perPage:200,
                 page:1,
@@ -99,9 +101,7 @@ export default {
             };
             getProteinData(param).then(
                 res=>{
-                    // console.log(res)
                     var pnames = res.message.info;
-                    // var pnames = pnames.map(o=>{return{value:o.Protein}});
                     pnames = pnames.map(o=>{return{value:o.Protein}});
                     clearTimeout(this.timeout);
                     this.timeout = setTimeout(() => {
@@ -116,7 +116,6 @@ export default {
         },
         // handleSelect(item) {
         handleSelect() {
-            // console.log(item);
             console.log("");
         },
         visualization(){
@@ -126,6 +125,7 @@ export default {
         getproteins(){
             this.isshowresult = false; // new
             deleteoldsvg();
+
             if(this.pname != ''){
                 let param ={
                     perPage:1,
@@ -141,7 +141,7 @@ export default {
                         this.data = res.message.info;
                         console.log(this.data);
                         if(this.data.length==0||(this.data.length==1&&this.data[0].num_id=='')){
-                            window.alert("No data available.") 
+                            window.alert("No data available.")
                             $('#show_result').html($('#show_result').html())
                         }else{
                             
@@ -168,7 +168,7 @@ export default {
                 window.alert("Please enter a protein.");
             }
         },
-        //添加正常定位
+        // Add normal positioning
         addnormal(normal_localization){
             var normal="";
             normal = normal_localization;
@@ -180,7 +180,7 @@ export default {
                 console.log("");
             }
         },
-        //添加异常定位
+        // Add Exception Location
         addinnormal(mislocalization){
             var innormal="";
             innormal = mislocalization;
@@ -192,17 +192,17 @@ export default {
                 console.log("");
             }
         },
-        //显示可视化结果
+        // Display visualization results
         showresult() {
             var abnormal_list = this.data[0].Mislocalization.replace(/"/g,"").replace(/\[.*?\]/g,'').replace(/\(.*?\)/g,'').split(",");
             var normal_list = this.data[0].Normal_localization.replace(/"/g,"").replace(/\[.*?\]/g,'').replace(/\(.*?\)/g,'').split(",");
             
             for(var i = 0; i<abnormal_list.length;i++){
                 for(var j = 0; j< normal_list.length;j++){
-                    var innormal = abnormal_list[i]; // 异常定位
-                    var normal = normal_list[j]; // 正常定位
-                    var first = this.Positioning_coordinates[normal];  // 起点 正常定位
-                    var final = this.Positioning_coordinates[innormal];  // 终点 异常定位
+                    var innormal = abnormal_list[i]; // Anomaly Location
+                    var normal = normal_list[j]; // Normal positioning
+                    var first = this.Positioning_coordinates[normal];  // Starting point Normal positioning
+                    var final = this.Positioning_coordinates[innormal];  // End point Abnormal positioning
                     
                     if(first == undefined && final == undefined){
                       console.log("");
@@ -220,13 +220,13 @@ export default {
                       else{
                           this.isshowresult = true;
                           var svg = document.getElementById('svg_01');
-                          var arrow = createarrow(first[0],first[1], final[0],final[1]); // 创建箭头
-                          var path = createSVGPath(first[0],first[1], final[0],final[1]); // 创建弧线   
+                          var arrow = createarrow(first[0],first[1], final[0],final[1]); // Create Arrows
+                          var path = createSVGPath(first[0],first[1], final[0],final[1]); // Creating Arcs   
                           svg.appendChild(arrow);
                           svg.appendChild(path);
                       }
-                      this.addinnormal(abnormal_list[i]); // 标记出 异常定位
-                      this.addnormal(normal_list[j]); // 标记出 正常定位
+                      this.addinnormal(abnormal_list[i]); // Marke anomaly location
+                      this.addnormal(normal_list[j]); // Mark normal positioning
                     } 
                 }
             }
@@ -236,7 +236,7 @@ export default {
     }
 };
 
-// 创建弧
+// Create Arc
 function createSVGPath(startX, startY,finalX,finalY) {
     
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -255,18 +255,17 @@ function createSVGPath(startX, startY,finalX,finalY) {
     path.setAttribute('fill', 'none');
     path.setAttribute('transform',"translate(-5.2 -49.72)")
     path.setAttribute("class","newadd")
+
     return path;
 }
 
-// 创建箭头
+// Create Arrows
 function createarrow(startX, startY,finalX,finalY){
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     var cxx = (startX + finalX)/2;
     var cyy = (startY + finalY)/2;
     var k = -(startX - finalX)/(startY-finalY);
     var b = cyy - cxx*k;
-    // var cxx = cxx+0.6*(startX - finalX)*Math.sqrt(1/(k*k+1));
-    // var cyy = k*cxx + b;
     cxx = cxx+0.6*(startX - finalX)*Math.sqrt(1/(k*k+1));
     cyy = k*cxx + b;
 
@@ -307,7 +306,7 @@ function createarrow(startX, startY,finalX,finalY){
 }
 
 
-// 创建定位图标
+// Create location icons
 function createlocation(x,y,isnormal){
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -346,7 +345,7 @@ function createlocation(x,y,isnormal){
     svg.setAttribute("width","10");
     svg.setAttribute("hight","10");
     svg.setAttribute("p-id","3994");
-    // 绘制图标
+    // Drawing icons
     var d = LOCATION_SVG_D
     path.setAttribute('d',d);
     // path.setAttribute('onmouseenter','detailInfo('+'"'+location_detail+'"'+')');
@@ -357,7 +356,6 @@ function createlocation(x,y,isnormal){
         svg.setAttribute("id","svg_nomal")
 
     }else{
-        // path.setAttribute('fill',"rgba(248,5,5,1)");
         path.setAttribute('fill',"#f00");
         svg.setAttribute("id","svg_unnomal")
     }
@@ -372,7 +370,7 @@ function createlocation(x,y,isnormal){
     return svg;
 }
 
-// 删除旧元素
+// Delete old elements
 function deleteoldsvg(){
     console.log("delete old svg")
     var oldsvg = document.getElementsByClassName("newadd")
@@ -384,7 +382,7 @@ function deleteoldsvg(){
     }
 }
 
-//向元素中插入stript
+// Insert stript into the element
 function insertscript(svg,script){
     var html = script;
     var cont = svg;
@@ -401,12 +399,12 @@ function insertscript(svg,script){
   /* font-size: 15px; */
 }
 .myForm {
-  margin: 10px auto; /* 表单居中设置 */
+  margin: 10px auto; /* Form centering settings */
   padding: 40px 60px;
   width: 70%;
   // background: lightgray;
   // color: #606266;
-  border: 3px solid #b4ede7;
+  border: 3px solid #00B4D8;
   border-radius: 10px;
 }
 
@@ -430,25 +428,25 @@ function insertscript(svg,script){
   height: 80px;
   background: #e6f0ef; /* Old browsers */
   background: -moz-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
-    -45deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
-    135deg,
-    #e6f0ef 45%,
-    #b4ede7 100%
+    200deg,
+    #9AD0EC 60%,
+    #398AB9 80%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .el-form-item {
-  border-top: 1px solid #ebeef5; // 表格线条颜色
+  border-top: 1px solid #ebeef5; // Table line color
   margin-bottom: 0;
 }
 
@@ -456,7 +454,7 @@ function insertscript(svg,script){
   border-right: 1px solid #ebeef5;
 }
 
-// /deep/ 相当于 >>>
+// /deep/ is equivalent to >>>
 /deep/ .el-checkbox__inner:hover {
   background-color: rgb(115, 200, 200) !important;
   border-color: rgb(115, 200, 200) !important;
@@ -465,7 +463,7 @@ function insertscript(svg,script){
   background-color: rgb(115, 200, 200) !important;
   border-color: rgb(115, 200, 200) !important;
 }
-// 单选框的标签可以换行了
+
 /deep/ .all_label {
   display: inline-grid;
   white-space: pre-line;
@@ -540,7 +538,7 @@ function insertscript(svg,script){
   font-weight: bold;
 }
 .explain {
-  border: solid 1px #99cccc;
+  border: solid 1px #0E3EDA;
   padding: 10px;
 }
 .explain p {
@@ -570,10 +568,10 @@ function insertscript(svg,script){
 
 </style>
 <style lang="scss" scoped>
-// /deep/会报错 用::v-deep
+// /deep/ will report an error with ::v-deep
 :v-deep .el-form-item__label {
-  float: none; // 取消label左浮动
-  word-break: break-word; // 支持单词截断换行
+  float: none; // Cancel label left float
+  word-break: break-word; // Support word truncation line feed
 }
 ::v-deep .el-table__expand-icon{
  -webkit-transform: rotate(0deg);
