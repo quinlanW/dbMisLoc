@@ -30,9 +30,16 @@
                 <el-form-item label="Mislocalization Condition">
                     <span>{{ props.row.condition }}</span>
                 </el-form-item>
+                <el-form-item label="Mislocalization Interpretation">
+                    <span>{{ props.row.interpretation }}</span>
+                </el-form-item>
                 <!-- <el-form-item label="Mislocalization Interpretation">
-                    <span>{{ props.row.condition }}</span>
+                  <a :href="'https://www.uniprot.org/uniprot/'+props.row.Uniprot_Entry" target="_blank" class="TestCSS">
+                    {{props.row.Uniprot_Entry}}
+                  </a>
                 </el-form-item> -->
+                
+                
               </el-form>
               </template>
             </el-table-column>
@@ -53,6 +60,7 @@
 import $ from 'jquery'
 import { getProteinData } from '@/api/dataReq'
 import { SVG,SCRIPT_NOMLOCATION,LOCATION_SVG_D } from '../assets/js/visulization.js'
+import { showLoading, hideLoading } from '../assets/js/loading.js'
 
 export default {
     name: "Visualization",
@@ -61,17 +69,22 @@ export default {
             isshowresult:false,
             Mislocalization:'',
             Normal_localization:'',
+            Mis_condition: '',
             Interpretation:'',
             pname:'',
             pnames:[],
             data:[],
             tableData: [],
             Positioning_coordinates:{
-                "Nucleolus":[99.31,71],
+                "Nucleus(Nucleolus)":[99.31,71],
+                "Nucleus(Nucleoplasm)":[110,71],
+                "Nucleus(Nuclear Envelope)":[112,62],
+                "Nucleus(Chromatin)":[99.31,71],
+                "Nucleus(Nuclear Aggregates)":[118, 69],
+                "Nucleus": [118, 69],
                 "Cytoplasm": [55.17,96.88],
                 "Cytosol":[62,92],
                 "Mitochondrion": [60, 106],
-                "Nucleus": [118, 69],
                 "Plasma Membrane":[142,70],
                 "Menbrane": [142, 70],
                 // "Cell Surface":[148,26],
@@ -125,6 +138,7 @@ export default {
         getproteins(){
             this.isshowresult = false; // new
             deleteoldsvg();
+            showLoading();
 
             if(this.pname != ''){
                 let param ={
@@ -139,7 +153,7 @@ export default {
                 getProteinData(param).then(
                     res=>{
                         this.data = res.message.info;
-                        console.log(this.data);
+                        hideLoading();
                         if(this.data.length==0||(this.data.length==1&&this.data[0].num_id=='')){
                             window.alert("No data available.")
                             $('#show_result').html($('#show_result').html())
@@ -148,12 +162,24 @@ export default {
                             this.isshowresult = true;
                             this.Mislocalization = this.data[0].Mislocalization.replace(/\[.*?\]/g,'').replace(/\(.*?\)/g,'');
                             this.Normal_localization = this.data[0].Normal_localization.replace(/\[.*?\]/g,'').replace(/\(.*?\)/g,'');
-                            this.Interpretation = this.data[0].Mislocalization_conditions;
+                            if(this.data[0].Mislocalization_conditions=='n.a.'){
+                              this.Mis_condition = 'n.a.';
+                              this.Interpretation = 'n.a.';
+                            }
+                            else if(this.data[0].Mislocalization_conditions.indexOf('[') != -1){
+                              this.Mis_condition = this.data[0].Mislocalization_conditions.split('[')[0];
+                              this.Interpretation = this.data[0].Mislocalization_conditions.split('[')[1].split(']')[0];
+                            }
+                            else{
+                              this.Mis_condition = this.data[0].Mislocalization_conditions;
+                              this.Interpretation = 'n.a.';
+                            }
                             
                             this.tableData.push({
                               'norloc': this.data[0].Normal_localization,
                               'misloc': this.data[0].Mislocalization,
-                              'condition': this.Interpretation
+                              'condition': this.Mis_condition,
+                              'interpretation': this.Interpretation,
                               
                             });
                             
@@ -165,10 +191,11 @@ export default {
                     }
                 )
             }else {
+                hideLoading();
                 window.alert("Please enter a protein.");
             }
         },
-        // Add normal positioning
+        //Add normal location
         addnormal(normal_localization){
             var normal="";
             normal = normal_localization;
@@ -180,7 +207,7 @@ export default {
                 console.log("");
             }
         },
-        // Add Exception Location
+        //Add Mis-Location
         addinnormal(mislocalization){
             var innormal="";
             innormal = mislocalization;
@@ -192,17 +219,16 @@ export default {
                 console.log("");
             }
         },
-        // Display visualization results
         showresult() {
-            var abnormal_list = this.data[0].Mislocalization.replace(/"/g,"").replace(/\[.*?\]/g,'').replace(/\(.*?\)/g,'').split(",");
-            var normal_list = this.data[0].Normal_localization.replace(/"/g,"").replace(/\[.*?\]/g,'').replace(/\(.*?\)/g,'').split(",");
+            var abnormal_list = this.data[0].Mislocalization.replace(/"/g,"").replace(/\[.*?\]/g,'').split(",");
+            var normal_list = this.data[0].Normal_localization.replace(/"/g,"").replace(/\[.*?\]/g,'').split(",");
             
             for(var i = 0; i<abnormal_list.length;i++){
                 for(var j = 0; j< normal_list.length;j++){
-                    var innormal = abnormal_list[i]; // Anomaly Location
-                    var normal = normal_list[j]; // Normal positioning
-                    var first = this.Positioning_coordinates[normal];  // Starting point Normal positioning
-                    var final = this.Positioning_coordinates[innormal];  // End point Abnormal positioning
+                    var innormal = abnormal_list[i]; 
+                    var normal = normal_list[j]; 
+                    var first = this.Positioning_coordinates[normal];  // Starting Point 
+                    var final = this.Positioning_coordinates[innormal];  // Endpoint
                     
                     if(first == undefined && final == undefined){
                       console.log("");
@@ -213,20 +239,19 @@ export default {
                     else if(first != undefined && final == undefined){
                       this.addnormal(normal_list[j]);
                     }
+                    else if(first==final){
+                        this.addinnormal(abnormal_list[i]);
+                    }
                     else{
-                      if(first==final){
-                        this.isshowresult = true;
-                      }
-                      else{
-                          this.isshowresult = true;
-                          var svg = document.getElementById('svg_01');
-                          var arrow = createarrow(first[0],first[1], final[0],final[1]); // Create Arrows
-                          var path = createSVGPath(first[0],first[1], final[0],final[1]); // Creating Arcs   
-                          svg.appendChild(arrow);
-                          svg.appendChild(path);
-                      }
-                      this.addinnormal(abnormal_list[i]); // Marke anomaly location
-                      this.addnormal(normal_list[j]); // Mark normal positioning
+                      this.isshowresult = true;
+                      var svg = document.getElementById('svg_01');
+                      var arrow = createarrow(first[0],first[1], final[0],final[1]); // Create Arrows
+                      var path = createSVGPath(first[0],first[1], final[0],final[1]); // Creating Arcs   
+                      svg.appendChild(arrow);
+                      svg.appendChild(path);
+                      
+                      this.addinnormal(abnormal_list[i]); 
+                      this.addnormal(normal_list[j]); 
                     } 
                 }
             }
@@ -254,8 +279,7 @@ function createSVGPath(startX, startY,finalX,finalY) {
     path.setAttribute('stroke-width', 1);
     path.setAttribute('fill', 'none');
     path.setAttribute('transform',"translate(-5.2 -49.72)")
-    path.setAttribute("class","newadd")
-
+    path.setAttribute("class","newadd");
     return path;
 }
 
@@ -348,10 +372,7 @@ function createlocation(x,y,isnormal){
     // Drawing icons
     var d = LOCATION_SVG_D
     path.setAttribute('d',d);
-    // path.setAttribute('onmouseenter','detailInfo('+'"'+location_detail+'"'+')');
-    // path.setAttribute('onmouseleave','leave('+'"'+location_detail+'"'+')');
     if(isnormal){
-        // path.setAttribute('fill',"rgba(44,246,165,1)");
         path.setAttribute('fill',"rgba(44,246,165,1)");
         svg.setAttribute("id","svg_nomal")
 
@@ -372,17 +393,15 @@ function createlocation(x,y,isnormal){
 
 // Delete old elements
 function deleteoldsvg(){
-    console.log("delete old svg")
     var oldsvg = document.getElementsByClassName("newadd")
     console.log(oldsvg.length);
-    console.log("!!!!!",oldsvg);
     console.log(oldsvg.length);
     while(oldsvg[0]){
       oldsvg[0].remove();
     }
 }
 
-// Insert stript into the element
+//Insert stript into the element
 function insertscript(svg,script){
     var html = script;
     var cont = svg;
@@ -399,7 +418,7 @@ function insertscript(svg,script){
   /* font-size: 15px; */
 }
 .myForm {
-  margin: 10px auto; /* Form centering settings */
+  margin: 10px auto; 
   padding: 40px 60px;
   width: 70%;
   // background: lightgray;
@@ -411,6 +430,7 @@ function insertscript(svg,script){
 .el-table {
   font-size: 15px;
   color: #232324;
+  white-space: pre-line;
 }
 
 /deep/ .el-form-item__label {
@@ -445,24 +465,6 @@ function insertscript(svg,script){
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6f0ef', endColorstr='#b4ede7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
-.el-form-item {
-  border-top: 1px solid #ebeef5; // Table line color
-  margin-bottom: 0;
-}
-
-.el-form-item:not(:nth-child(6)) /deep/ .el-form-item__label {
-  border-right: 1px solid #ebeef5;
-}
-
-// /deep/ is equivalent to >>>
-/deep/ .el-checkbox__inner:hover {
-  background-color: rgb(115, 200, 200) !important;
-  border-color: rgb(115, 200, 200) !important;
-}
-/deep/ .el-radio__inner:hover {
-  background-color: rgb(115, 200, 200) !important;
-  border-color: rgb(115, 200, 200) !important;
-}
 
 /deep/ .all_label {
   display: inline-grid;
@@ -471,28 +473,7 @@ function insertscript(svg,script){
   overflow: hidden;
   line-height: 20px;
 }
-/deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
-  color: rgb(115, 200, 200) !important;
-}
-/deep/ .el-checkbox__input.is-checked .el-checkbox__inner {
-  background-color: rgb(115, 200, 200) !important;
-  border-color: rgb(115, 200, 200) !important;
-}
-/deep/ .el-checkbox__label {
-  padding-left: 5px;
-}
-/deep/ .el-radio__input.is-checked + .el-radio__label {
-  color: rgb(115, 200, 200) !important;
-}
-/deep/ .el-radio__input.is-checked .el-radio__inner {
-  background-color: rgb(115, 200, 200) !important;
-  border-color: rgb(115, 200, 200) !important;
-}
-/deep/ .el-radio__label {
-  padding-left: 5px;
-  font-size: 15px;
-  color: #232324;
-}
+
 /deep/ .el-textarea__inner {
   border-color: rgb(115, 200, 200) !important;
   font-size: 15px;
@@ -525,7 +506,15 @@ function insertscript(svg,script){
   font-size: 15px;
   color: #232324;
 }
-
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
 .el-table .warning-row {
   background: #ccf1f1;
 }
@@ -536,14 +525,6 @@ function insertscript(svg,script){
   line-height: 30px;
   color: #686868;
   font-weight: bold;
-}
-.explain {
-  border: solid 1px #0E3EDA;
-  padding: 10px;
-}
-.explain p {
-  text-indent: 2em;
-  text-align: justify;
 }
 
 .demo-table-expand {
@@ -568,10 +549,10 @@ function insertscript(svg,script){
 
 </style>
 <style lang="scss" scoped>
-// /deep/ will report an error with ::v-deep
+
 :v-deep .el-form-item__label {
-  float: none; // Cancel label left float
-  word-break: break-word; // Support word truncation line feed
+  float: none; 
+  word-break: break-word; 
 }
 ::v-deep .el-table__expand-icon{
  -webkit-transform: rotate(0deg);

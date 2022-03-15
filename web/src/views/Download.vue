@@ -10,9 +10,14 @@
     <div class="files" style="">
       <h3>dbMisLoc Data Description</h3>
       <div class="download-content" style="height: 80%">
+          <!-- <img src="../assets/img/download_icon.png" class="icon" /> -->
+        <!-- <span style="margin: auto;"> -->
           <div style="margin: 30px;">
             <span>
               The downloadable file contains all the data in the dbMisLoc database. 
+            <!-- </span>
+            <br><br>
+            <span> -->
               It contains the corresponding name of the protein, normal localization, 
               mislocalization, mislocalization condition, Uniprot AC, Uniprot ID, protein sequence, 
               GO (Biological process, Cellular component and Molecular function) and data source.

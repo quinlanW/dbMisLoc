@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div class="bbody" style="height: 100vh; overflow-x: hidden">
         <el-row class="title" style="color: #606060;">
             <img style="margin-right: 5px; margin-bottom: 5px; height: 45px; width: auto; vertical-align: middle;" src="../assets/img/blast_label.png" />
                 Blast
@@ -17,6 +17,8 @@
                 <el-button class="sou" type="success" v-on:click="Search(evalue,word_size)" style="margin-left: 10px; padding-left: 10px;" icon="el-icon-search" plain>Blast</el-button>
                 <el-button class="sou" type="prime" v-on:click="SearchExample()"   plain>Example</el-button>
                 <el-table :data="tableData" v-show="show" style="width: 100%; margin: 20px auto 0 auto" stripe strip highlight-current-row empty-text="..." border>
+                  
+                  <!-- <el-table-column  label="Query sequence id" prop="qseqid" width="270"></el-table-column> -->
                   <el-table-column  label="Subject seq id" prop="sseqid" width="230"></el-table-column>
                   <el-table-column  label="Percentage(identical matches)" prop="pident" width="250"></el-table-column>
                   <el-table-column  label="Alignment length" prop="length" width="200"></el-table-column>
@@ -56,10 +58,29 @@
                         </el-form>
                     </template>
                 </el-table-column>
-
                 </el-table>
             </div>
         </div>
+        <template>
+          <el-backtop target=".bbody" :visibility-height="100" :bottom="40">
+            <div
+              style="{
+                height: 100%;
+                width: 100%;
+                background-color: #151D3B;
+                box-shadow: 0 0 6px rgba(0,0,0, .12);
+                text-align: center;
+                line-height: 40px;
+                color: #EFFFFD;
+              }"
+            >
+              <img 
+                style="height: 20px; width: auto; vertical-align: middle;"
+                src="../assets/img/backtotop.png" alt=""
+              >
+            </div>
+          </el-backtop>
+        </template> 
     </div>
 </template>
 
@@ -96,6 +117,7 @@ export default {
             // Set the default value of evalue
             evalue: '1e-4',
             tableData:[],
+            // seq:[],
         }
     },
     methods: {
@@ -148,6 +170,7 @@ export default {
                     };
                     getProteinData(param).then(
                       res=>{
+                        // console.log(res.message.info[0]);
                         let protein = res.message.info[0]['Protein'];
                         let seq = res.message.info[0]['Nucleotide_Sequences_FASTA'];
                         let norloc = res.message.info[0]['Normal_localization'];
@@ -192,7 +215,9 @@ export default {
             })
         },
         SearchExample(){
-            this.textarea = this.example;  
+            this.textarea = this.example;
+            // this.tableData = [];
+            // this.show = true;   
         }
     }
 }
@@ -274,13 +299,13 @@ export default {
 }
 
 .el-form-item {
-  border-top: 1px solid #ebeef5; // Table line color
+  border-top: 1px solid #ebeef5; 
   margin-bottom: 0;
 }
 
-.el-form-item /deep/ .el-form-item__label {
-  border-right: 1px solid #ebeef5;
-}
+// .el-form-item /deep/ .el-form-item__label {
+//   border-right: 1px solid #ebeef5;
+// }
 
 // .el-form-item:nth-child(7) /deep/ .el-form-item__label {
 //   height: 80px;
@@ -288,7 +313,7 @@ export default {
 // .el-form-item:nth-child(7) /deep/ .el-form-item__content {
 //   margin-top: 15px;
 // }
-// /deep/ 相当于 >>>
+// /deep/  
 /deep/ .el-input__inner:hover {
   // background-color: rgb(115, 200, 200) !important;
   border-color: rgb(115, 200, 200) !important;
@@ -302,7 +327,6 @@ export default {
   background-color: rgb(115, 200, 200) !important;
   border-color: rgb(115, 200, 200) !important;
 }
-// Radio box labels can be line feeds
 /deep/ .all_label {
   display: inline-grid;
   white-space: pre-line;
@@ -353,6 +377,10 @@ export default {
   text-align: center;
   text-indent: 0;
 }
+
+.sou{
+  background-color: #ffffff;
+}
 // /deep/ .el-input {
 //   width: 60%;
 //   margin-left: 10px;
@@ -363,7 +391,6 @@ export default {
 //   border-color: rgb(115, 200, 200);
 // }
 
-// Cover the original button to change the style of the original button
 .upload {
   height: 35px;
   line-height: 35px;
@@ -378,7 +405,7 @@ export default {
   cursor: pointer;
 }
 
-// Select the original button for the file
+
 .change {
   position: absolute;
   overflow: hidden;
@@ -398,7 +425,7 @@ export default {
   color: #fff;
   background-color: #337ab7;
   border: #337ab7;
-  margin: auto 10px; // Button centering
+  margin: auto 10px; 
   outline: none;
   cursor: pointer;
 }
@@ -438,8 +465,8 @@ export default {
 <style lang="scss" scoped>
 
 ::v-deep .el-form-item__label {
-  float: none; 
-  word-break: break-word;
+  float: none; // Cancel label left float
+  word-break: break-word; // Support word truncation line feed
 }
 ::v-deep .el-table__expand-icon{
  -webkit-transform: rotate(0deg);

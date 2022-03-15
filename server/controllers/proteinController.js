@@ -40,7 +40,7 @@ exports.getblastresult= function(req, res, next) {
             outputfile = req.cookies.output;
         }
         
-        // 将前端的请求序列存在文件中
+        // Store the request sequence of the front-end in a file
         var seq_query = req.body.seqquery;
         var sizequery = req.body.sizequery.toString();
         var wordsize = req.body.wordsize.toString();
@@ -49,7 +49,7 @@ exports.getblastresult= function(req, res, next) {
         var path_result = tempPath_result + outputfile + '.txt';
         fs.writeFileSync(path_query, seq_query); 
         fs.writeFileSync(path_result,"");   
-        // 调用命令行测试
+        // Calling the command line test
         
         var cmd = blast_binPath+'blastp -query '+path_query+
                   ' -out '+path_result+
@@ -58,10 +58,10 @@ exports.getblastresult= function(req, res, next) {
                   ' -evalue '+sizequery+
                   ' -word_size '+wordsize+' -num_threads 1';
         exec(cmd, function(error, stdout, stderr) {
-            // 读取测试结果
-            let data = fs.readFileSync(path_result, "utf8").split('\n'); //\t分割也可以
+            // Read test results
+            let data = fs.readFileSync(path_result, "utf8").split('\n'); 
         
-            // 发送给前端
+            // Send to front-end
              res.send({
                 error: false,
                 message: {
@@ -152,7 +152,7 @@ exports.getProteins = function (req, res, next) {
         let sql = mysql.form("ptmis_table");
         let prop, val, op, rel;
         if (typeof req.body.conditions != "undefined") {
-            //条件查询
+            // Conditional queries
             for (index in req.body.conditions) {
                 let condition = req.body.conditions[index];
                 [prop, val, op, rel] = [
@@ -165,7 +165,7 @@ exports.getProteins = function (req, res, next) {
             }
         }
         
-        //按页返回信息
+        // Return information by page
         sql.limit(req.body.perPage * req.body.page + req.body.perPage)
             .orderBy("num_id")
             .select(function (err, data) {
@@ -178,7 +178,7 @@ exports.getProteins = function (req, res, next) {
                     let st = req.body.perPage * req.body.page - req.body.perPage,
                         ed;
                     if (st >= data.length) {
-                        //请求的页无数据
+                        //No data on the requested page
                         res.send({
                             error: false,
                             message: {
@@ -191,10 +191,10 @@ exports.getProteins = function (req, res, next) {
                         req.body.perPage * req.body.page >=
                         data.length
                     ) {
-                        //请求的页数据填不满
+                        //The requested page data is not filled
                         ed = data.length;
                     } else {
-                        //请求的页数据填满
+                        //The requested page is filled with data
                         ed =
                             req.body.perPage * req.body.page;
                     }

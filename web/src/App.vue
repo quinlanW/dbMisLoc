@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
+    <!-- Click on the navigation bar to jump to introduce -->
+    <router-view v-if="isRouterAlive"></router-view>
     <app-footer></app-footer>
   </div>
 </template>
@@ -12,10 +14,28 @@ import footer from "./components/Footer.vue"
 
 export default {
   name: 'App',
-  components: {
-    appHeader: header,
-    appFooter: footer
-  },
+	provide(){ // Click on the navigation bar to jump to introduce
+		return{
+			reload: this.reload
+		}
+	},
+	data(){  // Click on the navigation bar to jump to introduce
+		return {
+			isRouterAlive: true
+		}
+	},
+	components: {
+		appHeader: header,
+		appFooter: footer
+	},
+	methods: { // Click on the navigation bar to jump to introduce
+		reload(){
+			this.isRouterAlive = false
+			this.$nextTick(function () {
+				this.isRouterAlive = true
+			})
+		}
+	}
 }
 </script>
 

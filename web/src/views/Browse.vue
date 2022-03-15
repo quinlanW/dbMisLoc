@@ -7,7 +7,6 @@
       />
       Browse all
     </el-row>
-    <!-- After adding height, the el-container tab inside has no sliding bar -->
     <el-container style="height: expression(document.body.clientHeight-130px); border: 1px solid #eee" >
       <!-- Side navigation bar -->
       <el-aside width="250px" style="background-color: rgb(238, 241, 246); text-align:left;">
@@ -56,7 +55,6 @@
                 <div v-for="(value,key,index) in valueclass" :key="index">
                     <div :id="indexclass.toString()+index.toString()">
                         <h3><a name="cluster1"></a>Clustering according to {{ keyclass }} : {{ key }}</h3>
-                        <!-- height Fixed meter head -->
                         <el-table
                           :data="value"
                           :header-cell-style="{background:'#eef1f6',color:'#606266'}"
@@ -90,10 +88,16 @@
                                 <template slot-scope="props">
                                     <el-form label-position="left" class="demo-table-expand" label-width="auto" style="font-family: monospace;">
                                         <el-form-item label="Normal localizaiton GO">
-                                            <span>{{ props.row.Normal_localization_GO_ID }}</span>
+                                          <a  v-for="(goid,index) in props.row.Normal_localization_GO_ID.split(',')" :key="index" :href="'https://www.ebi.ac.uk/QuickGO/term/'+goid.split('[')[1].split(']')[0]"
+                                              target="_blank" class="TestCSS">{{ goid }}
+                                          <br></a>
+                                            <!-- <span>{{ props.row.Normal_localization_GO_ID }}</span> -->
                                         </el-form-item>
                                         <el-form-item label="Mislocalization GO">
-                                            <span>{{ props.row.Mislocalization_GO_ID }}</span>
+                                          <a  v-for="(goid,index) in props.row.Mislocalization_GO_ID.split(',')" :key="index" :href="'https://www.ebi.ac.uk/QuickGO/term/'+goid.split('[')[1].split(']')[0]"
+                                              target="_blank" class="TestCSS">{{ goid }}
+                                          <br></a>
+                                            <!-- <span>{{ props.row.Mislocalization_GO_ID }}</span> -->
                                         </el-form-item>
                                         <el-form-item label="Protein sequence">
                                             <span>{{ props.row.Nucleotide_Sequences_FASTA }}</span>
@@ -170,6 +174,9 @@ export default {
                 var nom_all = dict.Normal_localization;
                 var mis_all = dict.Mislocalization;
                 var condition = dict.Mislocalization_conditions;
+                // if(nom_all == 'n.a.'||mis_all == 'n.a.'||condition == 'n.a.'){
+                //   continue;
+                // }
                 
                 nom_all = nom_all.replace(/"/g,"");
                 mis_all = mis_all.replace(/"/g,"");
@@ -276,6 +283,12 @@ export default {
             dataclass["mislocalization"] = misdict_sorted;
             dataclass["mislocalization condition"] = condict_sorted;
 
+
+            // dataclass["normal localization"]=nomdicts;
+            // dataclass["mislocalization"]=misdicts;
+            // dataclass["mislocalization condition"]=conditiondicts;
+            // console.log(dataclass);
+            
             delete dataclass["normal localization"]['n.a.'];
             delete dataclass["mislocalization"]['n.a.'];
             delete dataclass["mislocalization condition"]['n.a.'];
@@ -310,7 +323,6 @@ export default {
                     //Data Classification
                     this.datamakeclass(this.alldata);
                     hideLoading();
-                    // console.log(this.dataclass);
                     // this.closeLoading;
                 },
                 err=>{

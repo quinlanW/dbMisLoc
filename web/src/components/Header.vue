@@ -5,7 +5,7 @@
                 <li class="title">
                     <img
                         alt="dbMislov database"
-                        src="../assets/img/header_logo2.png"
+                        src="../assets/img/header_logo.png"
                         style="height: 65px; width: auto; vertical-align: middle; margin: 5px;"
                     />
                 </li>
@@ -13,6 +13,7 @@
                     :key="item.id" 
                     :index="item.id" 
                     v-on:click="setname(item.name)"
+                    @click="refresh()"
                     :class="{ 'is-active': item.name == checkName }"
                 >
                     <router-link :to="item.url">
@@ -30,6 +31,7 @@
 <script>
 export default{
     name: "Header",
+    inject: ['reload'], // Click on the navigation bar to jump to introduce
     data(){
         return{
             title: "dbMisloc",
@@ -74,10 +76,13 @@ export default{
         };
     },
     methods: {
+        refresh(){ // Click to refresh to introduce
+            this.reload();
+        },
         setname(val){
             this.checkName = val
         },
-        // 响应式设计导航栏
+        // Responsive design navigation bar
         dropdownMenu() {
             let x = document.getElementById("dropdownClick");
             if (x.className === "topnav") {
@@ -87,8 +92,8 @@ export default{
             }
         }
     },
-     watch: {
-        /* 监听路由，并显示导航栏的选中效果 */
+    watch: {
+        /* Listening to the route and showing the selected effect of the navigation bar */
         $route: {
         handler() {
             let linkName = this.$route.name;
@@ -127,7 +132,7 @@ ul.topnav li.title {
 ul.topnav li a {
   display: block;
   padding: 20px 15px;
-  color: rgb(115, 200, 200);
+  color: #398AB9;
   font-weight: bold;
   font-family: "Source Sans Pro", sans-serif !important;
   height: 30px;
@@ -143,7 +148,7 @@ ul.topnav li.dropdownIcon {
 }
 
 ul.topnav .is-active a {
-  background: rgb(115, 200, 200);
+  background: #398AB9;
   color: white;
 }
 
@@ -168,7 +173,7 @@ ul.topnav .is-active a {
     display: block;
   }
 
-  /* 下拉图标大小不变 */
+  /* Drop-down icon size remains the same */
   ul.topnav.responsive li:not(:nth-child(9)) a {
     text-align: left;
     height: 0 !important;

@@ -1,7 +1,7 @@
 <template>
     <div class="result">
         <div class="header">
-        <!--element-ui's composite input box can be slotted to specify the content to be preceded or followed in the input. -->
+        <!--element-ui's composite input box can be slotted to specify the content to be preceded or followed by the input -->
         <el-row class="title" style="color: #606060; text-align: center; font-size: 1.5em; line-height: 80px; height: 80px;">
           <img src="../assets/img/search_label.png" style="height: 45px; width: auto;  vertical-align: middle; margin-right: 10px; margin-bottom: 5px;"/>
             Search from Database
@@ -41,7 +41,11 @@
         </el-autocomplete>
         </div>
 
-        <div class="content">
+        <!-- <div>
+          <p>{{ propertyresults }}</p>
+        </div> -->
+
+        <div class="content" style="height: 70vh; overflow-x: hidden">
           <el-row v-if="id==0" type="flex" justify="space-between" style="padding: 5px;" class="content">
             <el-col :span="12">
               <img src="../assets/img/search_ndata.png" alt="" style="height: auto; width:100%;">
@@ -55,6 +59,7 @@
                 the tutorial section of the 'Help' page.
 
               </p>
+              <!-- <img src="" alt=""> -->
               <img
                 alt="search example"
                 style="height: auto; width: 100%;"
@@ -102,12 +107,21 @@
 
             <el-table-column prop="" label="Details" type="expand" width="100">
               <template slot-scope="props">
-                <el-form label-position="left" class="demo-table-expand" label-width="auto" style="font-family: monospace;">    
+                <el-form label-position="left" class="demo-table-expand" label-width="auto" style="font-family: monospace;">
+                  <!-- <el-form-item label="Uniprot AC">
+                    <span>{{ props.row.Uniprot_Accession_number }}</span>
+                  </el-form-item> -->
                   <el-form-item label="Normal localization GO">
-                    <span>{{ props.row.Normal_localization_GO_ID }}</span>
+                    <a  v-for="(goid,index) in props.row.Normal_localization_GO_ID.split(',')" :key="index" :href="'https://www.ebi.ac.uk/QuickGO/term/'+goid.split('[')[1].split(']')[0]"
+                        target="_blank" class="TestCSS">{{ goid }}
+                    <br></a>
+                    <!-- <span>{{ props.row.Normal_localization_GO_ID }}</span> -->
                   </el-form-item>
                   <el-form-item label="Mislocalization GO">
-                    <span>{{ props.row.Mislocalization_GO_ID }}</span>
+                    <a  v-for="(goid,index) in props.row.Mislocalization_GO_ID.split(',')" :key="index" :href="'https://www.ebi.ac.uk/QuickGO/term/'+goid.split('[')[1].split(']')[0]"
+                        target="_blank" class="TestCSS">{{ goid }}
+                    <br></a>
+                    <!-- <span>{{ props.row.Mislocalization_GO_ID }}</span> -->
                   </el-form-item>
                   <el-form-item label="Protein sequence">
                     <span>{{ props.row.Nucleotide_Sequences_FASTA }}</span>
@@ -119,13 +133,33 @@
               </template>
             </el-table-column>
           </el-table>
-          
+          <template>
+            <el-backtop target=".content" :visibility-height="100" :bottom="40">
+              <div
+                style="{
+                  height: 100%;
+                  width: 100%;
+                  background-color: #151D3B;
+                  box-shadow: 0 0 6px rgba(0,0,0, .12);
+                  text-align: center;
+                  line-height: 40px;
+                  color: #EFFFFD;
+                }"
+              >
+                <img 
+                  style="height: 20px; width: auto; vertical-align: middle;"
+                  src="../assets/img/backtotop.png" alt=""
+                >
+              </div>
+            </el-backtop>
+          </template>
         </div>
     </div>
 </template>
 
 <script>
 import { getProteinData } from "@/api/dataReq.js"
+import { showLoading, hideLoading } from '../assets/js/loading.js'
 
 export default {
     data() {
@@ -178,7 +212,9 @@ export default {
 		}
     },
     methods: {
+        // tabRowClassName({ row, rowIndex }) {
         tabRowClassName({ rowIndex }) {
+          // console.log(row);
           var index = rowIndex + 1;
           if (index % 2 == 0) {
             return "warning-row";
@@ -191,6 +227,7 @@ export default {
             : properties;
           cb(results);
         },
+        // !==-1 indicates that you can match included, not initials
         createFilter(queryString) {
           return property => {
             return (
@@ -210,9 +247,11 @@ export default {
                 "val": '%'+this.inputContent+'%',
               }]
             };
+            showLoading();
             getProteinData(param).then(
               res=>{
                 this.proteinSchTable = res.message.info;
+                hideLoading();
               },
               err=>{
                 console.log(err)
@@ -222,7 +261,7 @@ export default {
         },
     },
 
-        // filterProperty(){
+    // filterProperty(){
         //   for(let i=0;i<this.uacproperty.length;i++){
         //     if(this.uacproperty[i]["value"]=='n.a.'){
         //       console.log(this.uacproperty[i]);
@@ -332,7 +371,7 @@ export default {
 </script>
 
 <style>
-/* No scoped, if use the zebra line setting is invalid */
+/* No scoped, if you use the zebra line setting is invalid */
 .header {
   width: 100%;
   padding-bottom: 60px;
@@ -429,11 +468,10 @@ export default {
 }
 
 </style>
-<style lang="scss" scoped>
-// /deep/ will report an error with ::v-deep
+<style lang="scss" scoped> 
 ::v-deep .el-form-item__label {
-  float: none; // Cancel label left float
-  word-break: break-word; // Support word truncation line feed
+  float: none; 
+  word-break: break-word; 
 }
 ::v-deep .el-table__expand-icon{
  -webkit-transform: rotate(0deg);

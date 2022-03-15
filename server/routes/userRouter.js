@@ -23,11 +23,11 @@ router.get("/all", function (req, res, next) {
     };
     res.send(ans);
 });
-/* 测试接口 */
+/* Test Interface */
 router.get("/proteins/all", proteinController.getProteinsAll);
 router.get("/proteins/type-value", proteinController.getProteinsByKeyValue);
 
-/* 用户接口 */
+/* User Interface */
 router.post("/proteins", proteinController.getProteins);
 router.get("/proteins/file", proteinController.getProteinsFile);
 router.post("/proteins/getblastresult", proteinController.getblastresult);

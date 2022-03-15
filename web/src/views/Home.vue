@@ -4,8 +4,8 @@
       <img src="../assets/img/home_label.png" style="height: 45px; width: auto;  vertical-align: middle; margin-right: 10px; margin-bottom: 5px;" />
       Welcome to <b>dbMisLoc</b>
     </el-row>
-    <el-row class="content" type="flex" justify="space-between">
-      <el-col :span="10">
+    <el-row class="content" type="flex" justify="space-between" >
+      <el-col :span="12">
         <i style="font-size: 20px; margin-right: 10px; color: #606060;" class="el-icon-info" >
           Introduction of dbMisLoc</i>
         <p>
@@ -27,7 +27,8 @@
         </p>
         <p>
           The<router-link to="/search"><b><i> 'Search'</i></b></router-link>
-          page provides the ability to search by protein name, Uniprot AC and Uniprot ID. 
+          page provides the ability to search by protein name, Uniprot AC, Uniprot ID, subcellular 
+          localization and mis-localization condition. 
           If the content of the search box matches the first few letters of the selected 
           attributes, a drop-down menu will be displayed. The corresponding information 
           will be displayed in a table with links to the original literatures for each event.
@@ -50,15 +51,24 @@
           The<router-link to="/help"><b><i> 'Help'</i></b></router-link>
           page provides step-by-step instructions on how to use the dbMisLoc database.
         </p>
+
         <p>
+          Currently, <b>120</b> conditional protein mis-localization events are stored 
+          in the dbMisLoc database, and new data are constantly added manually.
+        </p>
+        <p>
+          Last update on: Mar. 14th, 2022.
+        </p>
+        <!-- <p>
           Currently, <b>110</b> conditional protein mis-localization events are stored 
           in the dbMisLoc database, and new data are constantly added manually.
         </p>
         <p>
           Last update on: Jun. 16th, 2021.
-        </p>
+        </p> -->
       </el-col>
       <el-col :span="13">
+        <!-- <div id="myHeatmap" style="width: 600px;height:600px;"></div> -->
         <img
           alt="basic properties"
           src="../assets/img/home_right.png"
@@ -101,6 +111,7 @@
   padding: 20px 10%;
   margin: 0 auto;
   text-align: left;
+  margin-left: -30px;
 }
 .content p {
   /* Row spacing */

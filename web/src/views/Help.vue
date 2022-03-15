@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bbody" style="height: 90vh; overflow-x: hidden">
     <el-row class="title" style="color: #606060;">
       <img
         src="../assets/img/help_label.png"
@@ -19,7 +19,7 @@
             </b>), which manually collects and collates information on the normal localization 
             , mislocalization, sequences, and the corresponding gene ontology 
             descriptions of proteins from existing databases and published literature. Currently, the dbMisLoc 
-            database contains <b>110</b> proteins with mislocalizations, and the data will be 
+            database contains <b>120</b> proteins with mislocalizations, and the data will be 
             continuously added and updated.
           </p>
         </el-collapse-item>
@@ -32,6 +32,11 @@
             mislocalization conditions. Users can independently select categories to browse.
           </p>
           <img alt="browse help" src="../assets/img/help/browse.png" />
+          <p>
+            <strong>(2).</strong> The 'Browse' page also provides external links to related 
+            websites (PubMed, Uniprot and QuickGO) to view related information.
+          </p>
+          <img src="../assets/img/help/browse_2.png" alt="browse help">
         </el-collapse-item>
         <el-collapse-item
           title="3. Search help"
@@ -122,6 +127,26 @@
         </p>
       </div>
     </div>
+    <template>
+      <el-backtop target=".bbody" :visibility-height="100" :bottom="40">
+        <div
+          style="{
+            height: 100%;
+            width: 100%;
+            background-color: #151D3B;
+            box-shadow: 0 0 6px rgba(0,0,0, .12);
+            text-align: center;
+            line-height: 40px;
+            color: #EFFFFD;
+          }"
+        >
+          <img 
+            style="height: 20px; width: auto; vertical-align: middle;"
+            src="../assets/img/backtotop.png" alt=""
+          >
+        </div>
+      </el-backtop>
+    </template>
   </div>
 </template>
 

@@ -14,7 +14,11 @@ After your Node.js environment and MySQL are ready, find out the location of you
 
 ### Add data to MySQL database
 
-Firstly, you should create a database. Then, add data to the database by loading SQL file dbmisloc.sql
+Firstly, you should create a database. Then, add data to the database by loading SQL file dbmisloc.sql.
+
+### Install Blast
+
+Visit **Blast.ncbi**(https://blast.ncbi.nlm.nih.gov/Blast.cgi) to download the Blast installer
 
 ### Start backend
 
