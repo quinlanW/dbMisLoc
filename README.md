@@ -22,7 +22,7 @@ Visit **Blast.ncbi**(https://blast.ncbi.nlm.nih.gov/Blast.cgi) to download the B
 
 ### Start backend
 
-Enter the `server` directory in another command line program. In order to start the backend, the user needs a file to configure the MySQL database information, namely **connect.json**. Then execute the command `nodemon . /bin/www` or `npm run start`.
+Enter the `server` directory in another command line program. In order to start the backend, the users need to modify the configuration file under 'server/config' path to configure MySQL database information, namely **connect.json**. Then execute the command `nodemon . /bin/www` or `npm run start`.
 
 ### start web server
 
