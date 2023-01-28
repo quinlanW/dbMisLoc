@@ -53,12 +53,19 @@
         </p>
 
         <p>
+          Currently, <b>146</b> conditional protein mis-localization events are stored 
+          in the dbMisLoc database, and new data are constantly added manually.
+        </p>
+        <p>
+          Last update on: Jan. 28th, 2023.
+        </p>
+        <!-- <p>
           Currently, <b>120</b> conditional protein mis-localization events are stored 
           in the dbMisLoc database, and new data are constantly added manually.
         </p>
         <p>
           Last update on: Mar. 14th, 2022.
-        </p>
+        </p> -->
         <!-- <p>
           Currently, <b>110</b> conditional protein mis-localization events are stored 
           in the dbMisLoc database, and new data are constantly added manually.
