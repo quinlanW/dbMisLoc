@@ -9,7 +9,7 @@
     </el-row>
     <el-container style="height: expression(document.body.clientHeight-130px); border: 1px solid #eee" >
       <!-- Side navigation bar -->
-      <el-aside width="250px" style="background-color: rgb(238, 241, 246); text-align:left;">
+      <el-aside width="300px" style="background-color: rgb(238, 241, 246); text-align:left;">
         <el-menu :default-openeds="['1']">
           <el-submenu index="1">
             <template slot="title">
@@ -31,7 +31,9 @@
             </template>
             <div v-for="(value,index) in mislocationgo" :key="index">
                 <el-menu-item index="2-1">
+                  <span style="display:block;width:90%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" :title="value">
                     <a href="javascript:void(0)" @click="goAuchor('1',index)">{{value}}</a>
+                  </span>
                 </el-menu-item>
             </div>
           </el-submenu>
@@ -42,7 +44,9 @@
             </template>
             <div v-for="(value,index) in conditiongo" :key="index">
                 <el-menu-item index="3-1">
+                  <span style="display:block;width:90%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" :title="value">
                     <a href="javascript:void(0)" @click="goAuchor('2',index)">{{value}}</a>
+                  </span>
                 </el-menu-item>
             </div>
           </el-submenu>
