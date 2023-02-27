@@ -31,5 +31,6 @@ router.get("/proteins/type-value", proteinController.getProteinsByKeyValue);
 router.post("/proteins", proteinController.getProteins);
 router.get("/proteins/file", proteinController.getProteinsFile);
 router.post("/proteins/getblastresult", proteinController.getblastresult);
+router.post("/proteins/getcountdata", proteinController.getcountdata);
 
 module.exports = router;

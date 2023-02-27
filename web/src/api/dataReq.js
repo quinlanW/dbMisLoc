@@ -9,6 +9,14 @@ export function getProteinData(params) {
   })
 }
 
+export function getCountData(params){
+  return request({
+    url: '/api/proteins/getcountdata',
+    method: 'post',
+    data: params
+  })
+}
+
 // export function getProteinFile(){
 //   return request({
 //     url: '/api/proteins/file',

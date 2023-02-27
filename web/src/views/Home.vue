@@ -53,11 +53,11 @@
         </p>
 
         <p>
-          Currently, <b>146</b> conditional protein mis-localization events are stored 
+          Currently, <b>{{this.allDataNum}}</b> conditional protein mis-localization events are stored 
           in the dbMisLoc database, and new data are constantly added manually.
         </p>
         <p>
-          Last update on: Jan. 28th, 2023.
+          Last update on: Feb. 28th, 2023.
         </p>
         <!-- <p>
           Currently, <b>120</b> conditional protein mis-localization events are stored 
@@ -74,7 +74,7 @@
           Last update on: Jun. 16th, 2021.
         </p> -->
       </el-col>
-      <el-col :span="13">
+      <el-col :span="12">
         <!-- <div id="myHeatmap" style="width: 600px;height:600px;"></div> -->
         <img
           alt="basic properties"
@@ -83,11 +83,112 @@
         />
       </el-col>
     </el-row>
+
+    <el-row class="content" type="fles" justify="space-between">
+      <el-row>
+        <i style="font-size: 20px; margin-right: 10px; color: #606060;" class="el-icon-info" >
+          Data Count of dbMisLoc</i>
+      </el-row>
+      <p></p>
+      <el-row>
+        <el-col :span="8">
+          <el-table
+            :data="norCountData"
+            height="250"
+            border
+            style="width: 100%">
+            <el-table-column
+              prop="loc"
+              label="Normal Localization"
+              width="0.5">
+            </el-table-column>
+            <el-table-column
+              prop="num"
+              label="Record Number"
+              width="0.5">
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="8">
+          <el-table
+            :data="misCountData"
+            height="250"
+            border
+            style="width: 100%">
+            <el-table-column
+              prop="loc"
+              label="Mis-localization"
+              width="0.5">
+            </el-table-column>
+            <el-table-column
+              prop="num"
+              label="Record Number"
+              width="0.5">
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="8">
+          <el-table
+            :data="condCountData"
+            height="250"
+            border
+            style="width: 100%">
+            <el-table-column
+              prop="loc"
+              label="Mis-Condition"
+              width="0.5">
+            </el-table-column>
+            <el-table-column
+              prop="num"
+              label="Record Number"
+              width="0.5">
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+    </el-row>
   </div>
 </template>
 
 <script>
+// import request from '@/utils/request'
+import { getCountData } from "@/api/dataReq.js"
 
+export default {
+  data() {
+    return {
+      allDataNum: 0,
+      norCountData: [],
+      misCountData: [],
+      condCountData: [],
+
+    }
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData(){
+      getCountData().then(
+        res=>{
+          console.log(res)
+          this.allDataNum = res.message.num
+          this.norCountData = res.message.norm
+          this.misCountData = res.message.mis
+          this.condCountData = res.message.cond
+          // console.log(norCountData)
+          // console.log(misCountData)
+          // console.log(condCountData)
+        },
+      )
+    },
+  },
+  
+  // created() {
+  //   // this.allDataNum = 146;
+  //   this.getData();
+  // },
+}
 </script>
 
 <style scoped>

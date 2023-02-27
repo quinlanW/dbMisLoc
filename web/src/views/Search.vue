@@ -168,9 +168,15 @@ export default {
 			proteinMorTable: [],
 			recData: [], // Accepted data
 			inputContent: "", // Enter query data
-			searchOpt: "Protein", // Select query type
+			searchOpt: "Global", // Select query type
 			options: [
 				{
+          label: "Global Search",
+          options: [
+            { value: "Global", label: "Global"},
+          ]
+        },
+        {
 					label: "Protein Related",
 					options: [
 						{ value: "Protein", label: "Protein Name"},
@@ -209,6 +215,7 @@ export default {
 			uidproperty: [],
       norlocproperty: [],
       mislocproperty: [],
+      globalproperty: [],
 		}
     },
     methods: {
@@ -301,6 +308,9 @@ export default {
                 this.misconproperty.push({
                   "value": condStr[i]
                 });
+                this.globalproperty.push({ // Global
+                  "value": condStr[i]
+                });
 
               }
             }
@@ -309,10 +319,16 @@ export default {
               this.uacproperty.push({
                 "value": this.recData[i]["Uniprot_Accession_number"]
               });
+              this.globalproperty.push({ // Global
+                  "value": this.recData[i]["Uniprot_Accession_number"]
+              });
             }
             if(this.recData[i]["Uniprot_Entry"] != 'n.a.'){
               this.uidproperty.push({
                 "value": this.recData[i]["Uniprot_Entry"]
+              });
+              this.globalproperty.push({ // Global
+                  "value": this.recData[i]["Uniprot_Entry"]
               });
             }
             // localization
@@ -322,6 +338,9 @@ export default {
               if(!norlocflag.includes(norloc)&&norloc!='n.a.'){
                 norlocflag.push(norloc);
                 this.norlocproperty.push({
+                  "value": norloc
+                });
+                this.globalproperty.push({ // Global
                   "value": norloc
                 });
               }
@@ -335,10 +354,13 @@ export default {
                 this.mislocproperty.push({
                   "value": misloc
                 });
+                this.globalproperty.push({ // Global
+                  "value": misloc
+                });
               }
             }
           }
-          this.propertyresults = this.properties;
+          this.propertyresults = this.globalproperty;
         },
         err=>{
           console.log(err);
@@ -349,8 +371,8 @@ export default {
       searchOpt(val){
         var searchOpt = val;
         var _this = this;
-        if (searchOpt == "") {
-          _this.propertyresults = _this.properties;
+        if (searchOpt == "Global") {
+          _this.propertyresults = _this.globalproperty;
         } else if (searchOpt == "Protein") {
           _this.propertyresults = _this.proproperty;
         } else if (searchOpt == "Mislocalization_conditions") {

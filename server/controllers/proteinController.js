@@ -13,6 +13,88 @@ const tempPath_result='/Users/quinlan/Desktop/dbmisloc/server/blast/temp/'
 
 const db_path = '/Users/quinlan/Desktop/dbmisloc/server/blast/misblastdb/misblastdb' 
 
+exports.getcountdata = function(req, res, next) {
+    mysql.form("ptmis_table").where("Protein", "%", "like")
+            .select(function (err, data) {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send({
+                        error: true,
+                        message: "服务器内部错误 BKV",
+                    });
+                }
+                var normalList = {}
+                var misList = {}
+                var condList = {}
+                var normal = new Array()
+                var mis = new Array()
+                var cond = new Array()
+                data.forEach(element => {
+                    // console.log(element)
+                    nom_all = element["Normal_localization"].replace(/"/g,"").replace(/[([]{1}.+.[)]]{1}/g,"").replace(/\[.*?\]/g,'')
+                    mis_all = element["Mislocalization"].replace(/"/g,"").replace(/[([]{1}.+.[)]]{1}/g,"").replace(/\[.*?\]/g,'')
+                    cond_all = element["Mislocalization_conditions"].replace(/"/g,"").replace(/[([]{1}.+.[)]]{1}/g,"").replace(/\[.*?\]/g,'')
+                    normalL = nom_all.split(",")
+                    misL = mis_all.split(",")
+                    condL = cond_all.split(",") 
+
+                    normalL.forEach(element => {
+                        if(element in normalList){
+                            normalList[element] = normalList[element] + 1
+                        } else {
+                            normalList[element] = 1
+                        }
+                    });
+                    misL.forEach(element => {
+                        if(element in misList){
+                            misList[element] = misList[element] + 1
+                        } else {
+                            misList[element] = 1
+                        }
+                    });
+                    condL.forEach(element => {
+                        if(element in condList){
+                            condList[element] = condList[element] + 1
+                        } else {
+                            condList[element] = 1
+                        }
+                    });
+                });
+                
+                // console.log(normalList)
+                for(var item in normalList){
+                    console.log(item)
+                    normal.push({
+                      loc: item,
+                      num: normalList[item]
+                    })
+                  }
+                for(var item in misList){
+                mis.push({
+                    loc: item,
+                    num: misList[item]
+                })
+                }
+                for(var item in condList){
+                cond.push({
+                    loc: item,
+                    num: condList[item]
+                })
+                }
+                console.log(normal)
+                res.send({
+                    error: false,
+                    message: {
+                        num: data.length,
+                        norm: normal,
+                        mis: mis,
+                        cond: cond
+                    },
+                });
+                return;
+            });
+};
+
 exports.getblastresult= function(req, res, next) {
     if (
         typeof req.body.seqquery == "undefined" ||
@@ -76,7 +158,7 @@ exports.getblastresult= function(req, res, next) {
             return;
         });
     }
-}
+};
 
 exports.getProteinsAll = function (req, res, next) {
     mysql.form("ptmis_table").where("num_id", "0", ">=").select(function (err, data) {
@@ -161,7 +243,18 @@ exports.getProteins = function (req, res, next) {
                     condition.op,
                     condition.rel,
                 ];
-                sql = sql.where(prop, val, op, rel).setBinary(false);
+                if (prop == 'Global'){
+                    sql = sql.where("Protein", val, op, "or")
+                        .where("Normal_localization", val, op, "or")
+                        .where("Mislocalization", val, op, "or")
+                        .where("Uniprot_Accession_number", val, op, "or")
+                        .where("Uniprot_Entry", val, op, "or")
+                        .where("Mislocalization_conditions", val, op)
+                        .setBinary(false)
+                }
+                else{
+                    sql = sql.where(prop, val, op, rel).setBinary(false);
+                }
             }
         }
         

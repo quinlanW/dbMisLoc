@@ -19,7 +19,7 @@
             </b>), which manually collects and collates information on the normal localization 
             , mislocalization, sequences, and the corresponding gene ontology 
             descriptions of proteins from existing databases and published literature. Currently, the dbMisLoc 
-            database contains <b>120</b> proteins with mislocalizations, and the data will be 
+            database contains <b>146</b> proteins with mislocalizations, and the data will be 
             continuously added and updated.
           </p>
         </el-collapse-item>
