@@ -1,6 +1,6 @@
 # dbMisloc
 
-
+> [dbMisLoc: A Manually Curated Database of Conditional Protein Mis-localization Events](https://link.springer.com/article/10.1007/s12539-023-00564-0#citeas)
 
 ## Introduction
 
@@ -28,3 +28,6 @@ Enter the `server` directory in another command line program. In order to start 
 
 Enter the `web` directory in another command line program. Execute the command `npm run serve`.
 
+## Citation
+
+[1] Wang, RH., Luo, T., Guo, YP. *et al.* dbMisLoc: A Manually Curated Database of Conditional Protein Mis-localization Events. *Interdiscip Sci Comput Life Sci* (2023). https://doi.org/10.1007/s12539-023-00564-0
